@@ -5,6 +5,7 @@
 use fm\core\Router;
 use fm\core\Registry;
 
+// Константы
 define("DEBUG", 1); // 1 - режим разработки, 0 - режим продакшен (запись в лог).
 
 const WWW = __DIR__; // путь к текущей папке public
