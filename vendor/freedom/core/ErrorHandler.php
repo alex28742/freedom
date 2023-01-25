@@ -52,6 +52,9 @@ class ErrorHandler {
      * @param type $line Строка на которой произошла ошибка
      */
     public function writeLog($no = '', $msg = '', $file = '', $line = ''){
+        if(!is_file($file)){
+            throw new \Exception("Ошибка при указании пути к файлу логов");
+        }
         error_log("[". date('Y-m-d:H:i:s')."] Текст ошибки: {$msg} | Файл: {$file} | Строка: {$line}\n===\n", 3, LOGFILE);
     }
     
