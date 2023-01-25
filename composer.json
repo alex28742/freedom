@@ -1,0 +1,20 @@
+{
+    "name": "freedom/freedom",
+    "description": "there is nothing better than freedom",
+    "authors": [
+        {
+            "name": "Alex Kopnin",
+            "email": "alex28731@gmail.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "^2.8",
+        "phpmailer/phpmailer": "^6.7"
+    },
+    "autoload":{
+        "psr-4": {
+            "fm\\": "vendor/freedom",
+            "app\\": "app"
+        }
+    }
+}

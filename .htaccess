@@ -1,0 +1,4 @@
+AddDefaultCharset utf-8
+RewriteEngine On
+#перенаправляем все запросы в /public/
+RewriteRule ^(.*)$ public/$1
