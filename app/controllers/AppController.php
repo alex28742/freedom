@@ -7,11 +7,11 @@ use fm\core\App;
 
 class AppController extends Controller
 {
-    public $app; // базовый класс приложения
+    public object $app; // базовый класс приложения
     public object $model; // модель
-    public $meta = []; // метаданные
+    public array $meta = []; // метаданные
     //public string $layout; // шаблон
-    public $db; // соединение с БД (базовые общие методы)
+    public object $db; // соединение с БД (базовые общие методы)
     
     public function __construct($route, $layout = '') {
         $app = new App; // для использования в наследниках (реестр)

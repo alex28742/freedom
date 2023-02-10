@@ -126,7 +126,7 @@ class User extends Model
     /** Получение списка ошибок строкой в виде списка ul > li
      * @return string
      */
-    public function errorsUl():string{ 
+    public function errorsUl():string{
         $errors = array_merge($this->form->errors, $this->err_unique);
         //dump($this->form->errors);
         if(empty($errors)) return "";

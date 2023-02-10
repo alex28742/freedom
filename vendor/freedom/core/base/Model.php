@@ -3,6 +3,7 @@
 
 namespace fm\core\base;
 use fm\core\Db;
+//use Valitron\Validator;
 
 /**
  * Description of Model
@@ -13,13 +14,10 @@ abstract class Model {
     public $db; // указатель на активное подключение
 
 
-    /**
-     * 
-     * @param type $table Имя таблицы с которой работает модель
-     */
     public function __construct() {
         $this->db = Db::getInstance(); // получаем активное подключение
     }
+
     
     /**
      * Обертка над Db::execute (запрос без получения данных из БД)

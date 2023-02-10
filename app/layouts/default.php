@@ -15,6 +15,7 @@
 </style>
 <body>
 <code>Default Template</code>
+<?// if(isset($_SESSION['user'])) {  dump($_SESSION['user']); } ?>
 <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#"></a>
