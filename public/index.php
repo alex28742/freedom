@@ -1,12 +1,14 @@
 <?php
 
-
+session_start();
 
 use fm\core\Router;
 use fm\core\Registry;
 
 // Константы
 define("DEBUG", 1); // 1 - режим разработки, 0 - режим продакшен (запись в лог).
+define("COMPRESS", 0); // true / false - сжатие Вида
+define("COMPRESS_GZ", 0); // сжатие с помощью gz архивации на сервере
 
 const WWW = __DIR__; // путь к текущей папке public
 define('CORE', dirname(__DIR__). '/vendor/freedom/core'); // путь к папке ядра
