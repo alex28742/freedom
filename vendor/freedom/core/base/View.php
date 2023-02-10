@@ -45,18 +45,34 @@ class View
           extract($vars);  
         } 
         $this->route['prefix'] = str_replace('\\', '/', $this->route['prefix']);
-        // подключаем вид
-        $file_view = APP . "/views/{$this->route['prefix']}{$this->route['controller']}/{$this->view}.php";
-        ob_start();
-        //////
-        if(is_file($file_view)){
-            require $file_view;
-        }else{
-            throw new \Exception("<p>Не найден вид {$file_view}</p>");
+        // подключаем вид если вид не отключен в экшене контроллера
+        if($this->view){
+            $file_view = APP . "/views/{$this->route['prefix']}{$this->route['controller']}/{$this->view}.php";
+
+            if(COMPRESS){ // сжатие за счет удаления пустот в Виде
+                ob_start([$this, 'compressPage']); // коллбэк функция сжатия
+            }
+            elseif (COMPRESS_GZ){ // сжатие на сервере за счет архивации данных
+                header("Content-Encoding: gzip");
+                ob_start('ob_gzhandler'); // включение сжатия на сервере
+            }
+            else{
+                ob_start();
+            }
+
+            //////
+            if(is_file($file_view)){
+                require $file_view;
+            }else{
+                throw new \Exception("<p>Не найден вид {$file_view}</p>");
+            }
+
+            // получили вид, перед получением шаблона
+            //$content = ob_get_clean();
+            $content = ob_get_contents(); // возвращаем буфер из колбэк функции compressPage()
+            ob_clean();
         }
 
-        // получили вид, перед получением шаблона
-        $content = ob_get_clean();
 
         // если не было указано Не подключать шаблон
 
@@ -129,6 +145,28 @@ class View
         self::$meta['title'] = $title;
         self::$meta['description'] = $description;
         self::$meta['keywords'] = $keywords;
+    }
+
+
+    /** Колбэк функция (метод) для сжатия Вида
+     * @param $buffer
+     * @return string
+     */
+    protected function compressPage($buffer){
+        if(!COMPRESS) return $buffer; // возврат без обработки
+        $search = [ // что ищем (шаблоны регулярных выражений)
+            '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
+            '/[^\S ]+\</s',     // strip whitespaces before tags, except space
+            '/(\s)+/s',         // shorten multiple whitespace sequences
+            '/<!--(.|\s)*?-->/' // Remove HTML comments
+        ];
+        $replace = [ // на что заменяем каждое выражение описанное в search
+            '>',
+            '<',
+            '\\1',
+            ''
+        ];
+        return preg_replace($search, $replace, $buffer);
     }
     
     
