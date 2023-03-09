@@ -144,7 +144,9 @@ class Db {
      * @return int
      */
     public function count($table, $condition = "", $params = ""){
-        return R::count($table,$condition, $params);
+        if($condition === "")
+            return R::count($table);
+        else return R::count($table, $condition, $params);
     }
 
     /** Удаление одиночного бина
