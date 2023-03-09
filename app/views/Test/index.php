@@ -2,19 +2,7 @@
 <p>View: TEST->index</p>
 
 
-<div style="max-width: 300px">
-<!-- --><?php
-//new \fm\widgets\menu\Menu([
-//    'table' => 'categories',
-//    'tpl' => 'select',
-//    'container' => 'select',
-//    'class' => 'form-select',
-//    'debug' => true,
-//    'cache' => 3600,
-//    'cacheKey' => 'main-menu',
-//    ]);
-//?><!--   -->
-</div>
+
 
 
 <?php
@@ -67,6 +55,12 @@ new \fm\widgets\menu\Menu([
                 </div>
             </div>
         <?php endforeach;?>
+        <?
+            // выводим пагинацию только если у нас больше 1 страницы
+            if($pagination->totalPages > 1){
+                echo $pagination;
+            }
+        ?>
     <?php endif; ?>
 </div>
 
@@ -74,6 +68,9 @@ new \fm\widgets\menu\Menu([
 <hr>
 
 <button class="btn btn-primary mybtn" id="send">Отправить</button>
+
+
+
 
 
 <script>

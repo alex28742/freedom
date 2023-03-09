@@ -3,21 +3,26 @@
 namespace app\controllers;
 use app\models\Test;
 use fm\core\base\View;
+use fm\widgets\pagination\Pagination;
 
 // тестирование библиотеки Monolog
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+
+
 
 class TestController extends AppController
 {   
     // переопределение шаблона для всех экшенов
     //public string $layout = 'test';
    public function __construct($route) {
+       if(!DEBUG) redirect('/');
        parent::__construct($route);
        $this->model = new Test();
    }
     
     public function indexAction(){
+
        //$menu = $this->model->db->findAll('category');
        // установка метаданных
        View::setMeta('title', 'desc', 'keywords');
@@ -26,14 +31,32 @@ class TestController extends AppController
        //$this->app->cache->set('menu', $menu);
        
        // Пытаюсь получить посты из кеша
-       $posts = $this->app->cache->get('posts');
-       if(!$posts){ // если данные не получены, получаем, сохраняем в кеш
-           $posts = $this->model->db->loadAll('posts', ['2','3']);
-           //$this->app->cache->set('posts', $posts);
-       }
+//       $posts = $this->app->cache->get('posts');
+//       if(!$posts){ // если данные не получены, получаем, сохраняем в кеш
+//           //$posts = $this->model->db->loadAll('posts', ['2','3']);
+//           //$this->app->cache->set('posts', $posts);
+//
+//       }
+
+        // РЕАЛИЗАЦИЯ ПАГИНАЦИИ
+        // получаю общее количество записей
+        $totalRecords = $this->model->db->count('posts');
+        // получаю номер текущей страницы для вывода
+        $page = isset($_GET["page"]) ? (int)$_GET['page'] : 1;
+        // устанавливаю количество записей для вывода на одной странице
+        $perpage = 2;
+        // создаю объект (будет сформирован html код пагинации)
+        $pagination = new Pagination($page, $perpage, $totalRecords);
 
 
-       $this->set(compact('posts'));
+        // определяю с какой записи начать делать выборку
+        $start = $pagination->getStart();
+
+        // получаем только посты для текущей страницы
+        $posts = $this->model->db->findAll('posts', "LIMIT $start, $perpage");
+
+
+       $this->set(compact('posts', 'pagination'));
        
     }
     
@@ -60,7 +83,7 @@ class TestController extends AppController
         
         $this->layout = false;
     }
-    
+
     // тестирование получения данных по ajax запросу из вида (готовый html)
     public function ajaxAction(){
         if($this->isAjax()){
