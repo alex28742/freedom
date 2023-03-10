@@ -79,7 +79,7 @@ class Pagination
      * echo new Pagination() интерпретатор будет искать метод __toString() и вызовет
      * @return string
      */
-    protected function __toString(){
+    public function __toString(){
         // определение используемого шаблона
         ob_start();
         // 1. Поиск шаблона в публичной директории public/tpl/pagination/...
