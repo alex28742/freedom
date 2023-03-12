@@ -1,3 +1,7 @@
+<?php
+$TEMPLATE = "/public/tpl/templates/{$this->layout}";
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,12 +10,12 @@
     <? \fm\core\base\View::getMeta(); ?>
     <link href="/public/libs/bootstrap/css/bootstrap.css" rel="stylesheet">
 <!--    стили шаблона-->
-    <link rel="stylesheet" href="/public/css/layouts/<?=$this->layout?>.css">
-<!--    общие стили проекта -->
-    <link rel="stylesheet" href="/public/css/main.css">
+
+    <link rel="stylesheet" href="<?=$TEMPLATE?>/css/style.css">
+
 </head>
 <style>
-    body{ background: lightblue; }
+
 </style>
 <body>
 <code>Default Template</code>
@@ -68,8 +72,6 @@
     
     
 <?
-
-
 // скрипты найденные в виде 
 $this->addScripts();
 ?>
