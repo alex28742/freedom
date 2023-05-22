@@ -1,3 +1,11 @@
+
+<?php
+// подключение виджета выбора языка
+//\fm\core\Registry::getInstance();
+new \fm\widgets\language\Language();
+
+?>
+
 <div class="recent">
     <h3>RECENT POSTS</h3>
     <?php

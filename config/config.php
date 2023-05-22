@@ -10,6 +10,7 @@ $config = [
        'cache' => 'fm\libs\Cache',
 //        'mail' => 'fm\libs\Mail',
         'errorHandler' => 'fm\core\ErrorHandler',
+        'collector' => 'fm\core\Collector',
     ],
     'settings' => [], // массив настроек
 ];

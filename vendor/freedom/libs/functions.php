@@ -1,5 +1,6 @@
 <?php
-    function dump($data, bool $die = false, bool $type = true):void{
+    function dump($data, bool $die = false, $self = "",  bool $type = true):void{
+        if($self) echo "<code>" .$self. "</code></br>";
         echo "<pre>"; if(!$type) var_dump($data); else print_r($data);
         echo "</pre>"; if($die) die();
     }

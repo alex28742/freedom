@@ -2,6 +2,8 @@
 
 namespace fm\core\base;
 
+use fm\core\App;
+
 class View
 {
     /** текущий маршрут
@@ -17,6 +19,9 @@ class View
      * текущий шаблон
      */
     public $layout;
+
+    // путь к ресурсам шаблона
+    public $template = "/public/tpl/templates/default";
     
     public static $meta = ['title' => '', 'description' => '', 'keywords' => ''];
     
@@ -31,6 +36,8 @@ class View
             $this->layout = false;
         }else{
             $this->layout = $layout ?: LAYOUT;
+            // поулчаю путь к ресурсам шаблона
+            $this->template = "/public/tpl/templates/{$this->layout}";
         }
         $this->view = $view;
     }
@@ -78,7 +85,8 @@ class View
 
         if(false !== $this->layout){
             // подключаем шаблон
-            $file_layout = APP . "/layouts/{$this->route['prefix']}{$this->layout}.php";
+            //$file_layout = APP . "/layouts/{$this->route['prefix']}{$this->layout}.php";
+            $file_layout = APP . "/layouts/{$this->route['prefix']}{$this->layout}/{$this->layout}.php";
             if(is_file($file_layout)){
                 // очищаем вид от скриптов
                 $content = $this->getScripts($content);
@@ -109,17 +117,23 @@ class View
         if(!empty($this->scripts)){
             // в контенте вырезаем скрипты которые были найдены (заменяем '')
             $content = preg_replace($pattern, '', $content);
-            
+            // добавляем массив скриптов в свойство объекта приложения для вывода в эпилоге
+            $app = App::getInstance(); // глобальный объект приложения
+            foreach ($this->scripts[0] as $script){
+                array_push($app::$registry->scripts, $script);
+            }
         }
         return $content;
         
     }
     
     /**
-     * Метод выводящий скрипты найденные в виде. Вызывать в шаблоне
+     * Метод добавляющий найденные скрипты в класс регистратора, для вывода в эпилоге
      */
     public function addScripts(){
+        $app = App::getInstance();
         if(!empty($this->scripts[0] && is_array($this->scripts[0]))){
+            $app::$registry->scripts = $this->scripts[0];
             foreach ($this->scripts[0] as $script){
                 echo $script;
             }
@@ -167,6 +181,39 @@ class View
             ''
         ];
         return preg_replace($search, $replace, $buffer);
+    }
+
+    /** Метод подключения включаемого файла в layout.
+     * @param $file
+     * @return void
+     */
+    public function IncludeFile($file){
+        $file = APP . "/layouts/{$this->layout}/inc/{$file}.php";
+        if(is_file($file)){
+            require $file;
+        }else{
+            echo "File {$file} not found...";
+        }
+    }
+
+    /** Метод подключающий стили найденные в виджетах
+     * @return void
+     */
+    public function getCSS(){
+        // получаю список файлов с помощью класса Collector
+        $css = [
+            "/assets/css/widgets0.css",
+            "/assets/css/widgets1.css",
+            "/assets/css/widgets2.css",
+        ];
+        // получаю все данные....
+
+        // создаю общий файл и получаю путь к нему
+
+        // подключаю общий файл...
+        foreach ($css as $item){
+            echo "<link href='{$item}' rel='stylesheet' type='text/css'>";
+        }
     }
     
     

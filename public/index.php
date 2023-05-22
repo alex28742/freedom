@@ -44,13 +44,19 @@ require '../vendor/freedom/libs/functions.php';
 //dump($tmp, true);
 
 // создаем основной объект приложения, который будет доступен глобально
-new \fm\core\App; 
+$app = \fm\core\App::getInstance();
 
 // здесь могу переопределить правила (до дефолтных)
 //Router::add('^page/(?P<action>[a-z-]+/(?P<alias>[a-z-]+$', ['controller' => 'Page']);
 //Router::add('^page/(?P<alias>[a-z-]+$', ['controller' => 'Page', 'action' => 'view']);
 
 // дефолтные правила - обработка пустой строки
+
+// подключение пролога
+try {
+    $app->getProlog();
+} catch (Exception $e) {
+}
 
 // обработка правила для админки prefix - название папки в контроллерах
 Router::add('^admin$', ['controller' => 'User', 'action' => 'index', 'prefix' => 'admin']); 
@@ -63,6 +69,12 @@ Router::add('^(?P<controller>[a-z-]+)/?(?P<action>[a-z-]+)?$');// первый �
 
 
 Router::dispatch($query);
+
+// подключение файла эпилога перед закрывающей body
+try {
+    $app->getEpilog();
+} catch (Exception $e) {
+}
 
 
 

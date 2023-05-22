@@ -71,27 +71,31 @@ class Router
      */
     public static function dispatch($url):void{
         $url = self::removeQueryString($url); // обрезаем явные гет-параметры
-        if(self::matchRoute($url)){
-            // если совпадение найдено, создаю объект, вызываю метод
-            $controller = 'app\controllers\\' . self::$route['prefix'] . self::$route['controller'] . 'Controller';
-            // проверяем есть ли у нас такой класс, подключаем
-            if(class_exists($controller)){
-                $cObj = new $controller(self::$route); // передаю параметр в конструктор
-                // вызываем метод
-                $action = self::lowerCamelCase(self::$route['action']).'Action';
-                if(method_exists($cObj, $action)){
-                    $cObj->$action(); // вызываем метод контроллера
-                    $cObj->getView();
+
+
+        if(!is_file($url)){ //todo добавил проверку на файл, но есть проблема по-прежнему
+            if(self::matchRoute($url)){
+                // если совпадение найдено, создаю объект, вызываю метод
+                $controller = 'app\controllers\\' . self::$route['prefix'] . self::$route['controller'] . 'Controller';
+                // проверяем есть ли у нас такой класс, подключаем
+                if(class_exists($controller)){
+                    $cObj = new $controller(self::$route); // передаю параметр в конструктор
+                    // вызываем метод
+                    $action = self::lowerCamelCase(self::$route['action']).'Action';
+                    if(method_exists($cObj, $action)){
+                        $cObj->$action(); // вызываем метод контроллера
+                        $cObj->getView();
+                    }else{
+                        //echo "Метод $controller::$action не найден";
+                        throw new \Exception("Метод $controller::$action не найден", 503);
+                    }
                 }else{
-                    //echo "Метод $controller::$action не найден";
-                    throw new \Exception("Метод $controller::$action не найден", 503);
+                    //echo "Контроллер $controller не найден";
+                    throw new \Exception("Контроллер $controller не найден", 503);
                 }
             }else{
-                //echo "Контроллер $controller не найден";
-                throw new \Exception("Контроллер $controller не найден", 503);
+                throw new \Exception("Страница не найдена", 404);
             }
-        }else{
-            throw new \Exception("Страница не найдена", 404);
         }
     }
 

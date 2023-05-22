@@ -6,52 +6,43 @@
 
 
 <?php
-new \fm\widgets\menu\Menu([
-    'table' => 'categories',
-    //'tpl' => 'default',
-    'container' => 'ul',
-    'class' => 'main-menu',
-    'debug' => true,
-    'cache' => false,
-    'cacheKey' => 'main-menu2',
-    ]);
-?>
 
+//new \fm\widgets\menu\Menu([
+//    'table' => 'categories',
+//    //'tpl' => 'default',
+//    'container' => 'select',
+//    'class' => 'main-menu',
+//    'debug' => false,
+//    'cache' => false,
+//    'cacheKey' => 'main-menu2',
+//    ]);
+//?>
+
+<? new \fm\widgets\menu\Menu([
+    'table' => 'categories', // таблица с ключами id, title, parent, alias
+    'tpl' => 'default', // шаблон по пути vendor/freedom/widgets/menu/tpl/
+    'container' => 'select', // обертка (ul or select. ul - по умолчанию)
+    'class' => 'menu', // класс для обертки
+    'cache' => false, // время кеширования (если передать false - кешир. откл)
+    'cacheKey' => 'test-menu', // уникальный идентификатор, напр. (main-menu)
+    'debug' => false, // протоколирование обращений к БД
+]);?>
 
 
 <div class="container">
     
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-<!--        <a class="nav-link active" aria-current="page" href="#">Home</a>
-        <a class="nav-link" href="#">Features</a>
-        <a class="nav-link" href="#">Pricing</a>
-        <a class="nav-link disabled">Disabled</a>-->
-        <?php /* foreach($menu as $link): ?>
-            <a class="nav-link" href="#"><?=$link['title']?></a>
-        <? endforeach; */?>
-      </div>
-    </div>
-  </div>
-</nav>
+    <? $this->IncludeFile('navbar');  ?>
 
-    
-    
-    
+
     <?php if(!empty($posts)): ?>
         <?php foreach ($posts as $post): ?>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <?php echo $post['title']?>
-                </div>
-                <div class="panel-body">
-                    <?php echo $post['text']?>
+            <?// dump($post, true);?>
+            <div class="content-grid-info">
+                <img src="<?=$this->template;?>/images/post1.jpg" alt=""/>
+                <div class="post-info">
+                    <h4><a href="<?=$this->template;?>/single.html">link</a><?=$post['title']?></h4>
+                    <p><?=$post['excerpt']?></p>
+                    <a href="<?=$this->template;?>/single.html"><span></span><?= \fm\core\base\Lang::get("recent_posts");?></a>
                 </div>
             </div>
         <?php endforeach;?>
@@ -67,7 +58,26 @@ new \fm\widgets\menu\Menu([
 
 <hr>
 
-<button class="btn btn-primary mybtn" id="send">Отправить</button>
+<div class="result_error"></div>
+<div class="result"></div>
+<form class='form ajax' action='/test/form' method='post'>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Адрес электронной почты</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+        <div id="emailHelp" class="form-text">Мы никогда никому не передадим вашу электронную почту.</div>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Пароль</label>
+        <input type="password" class="form-control" id="exampleInputPassword1">
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Проверить меня</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Отправить</button>
+</form>
+<br>
+<!--<button class="btn btn-primary mybtn" id="send">Отправить</button>-->
 
 
 
@@ -94,3 +104,5 @@ new \fm\widgets\menu\Menu([
     
 
 </script>
+
+<script src="/public/libs/js/ajax.js"></script>

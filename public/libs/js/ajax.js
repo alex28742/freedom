@@ -3,12 +3,12 @@
 Пример формы с которой работает код:
     <div class="result_error"></div>
     <div class="result"></div>
-    <form className='form default' action='/cards/cloud' method='post'>
+    <form class='form ajax' action='/cards/cloud' method='post'>
         <input class="form-control" type="text" name="input" required/>
         <button type="submit" class="">Отправить</button>
     </form>
 */
-$(document).on('submit','form.default', function(event){
+$(document).on('submit','.form.ajax', function(event){
     event.preventDefault();
     let $form = $(this);
     $required = $form.find('[data-required]'); // отбор обязательных полей

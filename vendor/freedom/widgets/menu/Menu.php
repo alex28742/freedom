@@ -1,6 +1,7 @@
 <?php
 namespace fm\widgets\Menu;
 use fm\core\Db;
+use fm\core\TSingleton;
 use fm\libs\Cache;
 use PHPMailer\PHPMailer\Exception;
 
@@ -10,7 +11,6 @@ use PHPMailer\PHPMailer\Exception;
  * @author als
  */
 class Menu {
-   
     protected $data; // данные получаемые из БД (массив категорий)
     // параметры принимаемые на вход
     protected $params = [
@@ -35,7 +35,7 @@ class Menu {
      * string cache
      * bool debug
      */
-    public function __construct(array $params) { 
+    public function __construct(array $params) {
         $this->db = Db::getInstance();
         // получаем все настройки
         if(is_array($params)){

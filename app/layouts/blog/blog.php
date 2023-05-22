@@ -10,6 +10,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <head>
     <? \fm\core\base\View::getMeta(); ?>
     <link href="/public/libs/bootstrap/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+    <? $this->getCSS(); // метод подключающий стили виджетов ?>
     <link href="<?=$this->template;?>/css/style.css" rel='stylesheet' type='text/css' />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -25,7 +26,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <div class="header">
     <div class="container">
         <div class="logo">
-            <a href="/"><img src="<?=$this->template;?>/images/logo.jpg" title="" /></a>
+            <a href="/"><img src="<?=$this->template;?>/images/logo.jpg" title="<? echo \fm\core\base\Lang::get('recent_posts');?>;" /></a>
         </div>
         <!---start-top-nav---->
         <div class="top-menu">
@@ -48,6 +49,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         <!---//End-top-nav---->
     </div>
 </div>
+
 <!--/header-->
 <div class="content">
     <div class="container">
@@ -111,12 +113,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 </script>
 
-<?
-// скрипты найденные в виде
-$this->addScripts();
-?>
-</body>
-</html>
+
 
 
 

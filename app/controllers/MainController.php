@@ -6,8 +6,8 @@ class MainController extends AppController
 {
 
     public function indexAction():void{
-        echo __METHOD__ . "</br>";
-        View::setMeta('Главная', 'Описание', 'Ключевики');
+        echo "<code>" . __METHOD__ . "</code></br>";
+        View::setMeta('Персональный блог', 'Описание', 'Ключевики');
 
     }
     

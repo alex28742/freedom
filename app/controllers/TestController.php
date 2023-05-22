@@ -2,7 +2,12 @@
 
 namespace app\controllers;
 use app\models\Test;
+use fm\core\App;
+use fm\core\base\Lang;
 use fm\core\base\View;
+use fm\core\Collector;
+use fm\core\Registry;
+use fm\widgets\language\Language;
 use fm\widgets\pagination\Pagination;
 
 // тестирование библиотеки Monolog
@@ -19,10 +24,13 @@ class TestController extends AppController
        if(!DEBUG) redirect('/');
        parent::__construct($route);
        $this->model = new Test();
+       // ЗАДАЮ ШАБЛОН
+       $this->layout = "blog";
+       // ПОДГРУЖАЮ ЯЗЫКОВЫЕ ФАЙЛЫ
+       Lang::load(App::$registry->getProperty('lang'), $this->layout);
    }
     
     public function indexAction(){
-
        //$menu = $this->model->db->findAll('category');
        // установка метаданных
        View::setMeta('title', 'desc', 'keywords');
@@ -37,6 +45,23 @@ class TestController extends AppController
 //           //$this->app->cache->set('posts', $posts);
 //
 //       }
+
+        // ПРИМЕР РАБОТЫ С КЕШЕМ (ПОЛУЧЕНИЕ ПОСТОВ)
+        /**
+         * $posts = $this->app->cache->get('posts');
+        if(empty($posts)){
+        $posts = $this->model->db->findAll('posts');
+        if(!empty($posts)){
+        $this->app->cache->set($posts, 'posts');
+        }
+        }else{
+        dump($posts, true);
+        }
+         */
+
+
+
+
 
         // РЕАЛИЗАЦИЯ ПАГИНАЦИИ
         // получаю общее количество записей
@@ -71,15 +96,10 @@ class TestController extends AppController
     }
     
     public function testAction(){
-        // пример выполнения ajax запроса
-        if($this->isAjax()){
-          echo 'is Ajax';
-        }else{
-          dump($this->model);
-        }
-        
 
-        // отключаем подключение шаблона
+       $collector = new Collector();
+       $files = $collector->getFiles();
+       dump($files);
         
         $this->layout = false;
     }
@@ -90,9 +110,19 @@ class TestController extends AppController
             $posts = $this->model->db->loadAll('posts', ['2','3']);
             $this->loadView('test', compact('posts'));
         }
-        
+
         
         $this->layout = false;
+    }
+
+    public function formAction(){
+       if($this->isAjax()){
+           echo "ajax пришел";
+       }else{
+           echo "not ajax";
+       }
+       $this->layout = false;
+       $this->view = false;
     }
 
     public function index2Action(){
@@ -134,6 +164,19 @@ class TestController extends AppController
         
         $this->set(compact('posts', 'post', 'post2', 'posts2', 'post3'));
 
+    }
+
+    public function tableAction(){
+       $model = new Test();
+       $lang = $model->db->dispense('language');
+       $lang->code = 'en';
+       $lang->title = 'Eng';
+       $lang->base = 0;
+       //$res = $model->db->store($lang);
+
+       //dump($res, true);
+        $this->layout = false;
+        $this->view = false;
     }
 
 
